@@ -17,11 +17,7 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-
 $router->get('/painel', 'PainelController@index');
-$router->get('/painel/mongo', 'PainelController@mongo');
+$router->get('/painel/painel', 'PainelController@painel');
 $router->get('/painel/migracao', 'PainelController@migracao');
 $router->get('/painel/multiplicador', 'PainelController@multiplicador');
-
-$router->post('/tracker', 'Tracker@index');
-$router->get('/home/aurelio', 'Home@aurelio');
