@@ -1,0 +1,101 @@
+[
+    {
+        "fechamento": "diario",
+        "periodo": "2022-04-03",
+        "visitas": 100,
+        "paginas": [
+            {
+                "url": "/namorar-capricornio/",
+                "acessos": 10
+            },
+            {
+                "url": "/lua-em-aries/",
+                "acessos": 20
+            },
+            {
+                "url": "/anita/",
+                "acessos": 22
+            }
+        ],
+        "origem": [
+            {
+                "media": "social",
+                "acessos": 10
+            },
+            {
+                "media": "seo",
+                "acessos": 20
+            },
+            {
+                "media": "direto",
+                "acessos": 20
+            }
+        ]
+    },
+    {
+        "fechamento": "mensal",
+        "periodo": "2022-04",
+        "visitas": 1000,
+        "paginas": [
+            {
+                "url": "/namorar-capricornio/",
+                "acessos": 100
+            },
+            {
+                "url": "/lua-em-aries/",
+                "acessos": 200
+            },
+            {
+                "url": "/anita/",
+                "acessos": 220
+            }
+        ],
+        "origem": [
+            {
+                "media": "social",
+                "acessos": 100
+            },
+            {
+                "media": "seo",
+                "acessos": 200
+            },
+            {
+                "media": "direto",
+                "acessos": 200
+            }
+        ]
+    },
+    {
+        "fechamento": "anual",
+        "periodo": "2022",
+        "visitas": 10000,
+        "paginas": [
+            {
+                "url": "/namorar-capricornio/",
+                "acessos": 1000
+            },
+            {
+                "url": "/lua-em-aries/",
+                "acessos": 2000
+            },
+            {
+                "url": "/anita/",
+                "acessos": 2200
+            }
+        ],
+        "origem": [
+            {
+                "media": "social",
+                "acessos": 1000
+            },
+            {
+                "media": "seo",
+                "acessos": 2000
+            },
+            {
+                "media": "direto",
+                "acessos": 2000
+            }
+        ]
+    }
+]

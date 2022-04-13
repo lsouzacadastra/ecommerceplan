@@ -1,0 +1,60 @@
+[
+    {
+        "ip": "143.137.249.76",
+        "data": "2022-04-03",
+        "chave_sessao": "0.ck6bpvpp0.4wequvso",
+        "dispositivo": "mobile",
+        "pais": "Brazil",
+        "paisc": "BR",
+        "estado": "Parana",
+        "estadoc": "PR",
+        "cidade": "Sao Jeronimo da Serra",
+        "origem": "google",
+        "referrer": "https://www.google.com.br/",
+        "resolucao": "414x896",
+        "os": "iOS",
+        "paginas": [
+            {
+                "hora": "19:36:44",
+                "url": "/namorar-capricornio/"
+            },
+            {
+                "hora": "19:36:44",
+                "url": "/lua-em-aries/"
+            },
+            {
+                "hora": "19:37:22",
+                "url": "/anita/"
+            }
+        ]
+    },
+    {
+        "ip": "143.137.249.76",
+        "data": "2022-04-03",
+        "chave_sessao": "0.23afadsfa.1123123",
+        "dispositivo": "mobile",
+        "pais": "Brazil",
+        "paisc": "BR",
+        "estado": "Parana",
+        "estadoc": "PR",
+        "cidade": "Sao Jeronimo da Serra",
+        "origem": "google",
+        "referrer": "https://www.google.com.br/",
+        "resolucao": "414x896",
+        "os": "iOS",
+        "paginas": [
+            {
+                "hora": "19:36:44",
+                "url": "/evolucao-dj-ao-longo-dos-anos/"
+            },
+            {
+                "hora": "19:36:44",
+                "url": "/cenas-mais-quentes-bruna-marquezine-novelas/"
+            },
+            {
+                "hora": "19:37:22",
+                "url": "/melhores-blogs-moda-tendencias/"
+            }
+        ]
+    }
+]
