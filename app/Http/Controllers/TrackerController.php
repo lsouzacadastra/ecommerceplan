@@ -3,11 +3,36 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Services\TrackerService;
+use App\Solutions\Tracker\Tracker;
 
-class Tracker extends Controller
+class TrackerController extends Controller
 {
 
     private $ARQUIVO = 'visitas.json';
+
+    public function collect(){
+        
+        //Libera o CORS
+        header('Access-Control-Allow-Origin: *');
+        header('Access-Control-Allow-Headers: *');
+        header('Access-Control-Allow-Methods: *');
+        header('Access-Control-Max-Age: 3600');
+        
+        //Default time
+        date_default_timezone_set('America/Sao_Paulo');
+       
+        $dados = json_decode(file_get_contents('php://input'), true);
+        
+        if(empty($dados['k'])){
+            $retorno =  json_encode(["sucess" => false]);
+        }else{
+            $tracker = new TrackerService();
+            $retorno = $tracker->registraVisista($dados);
+        }
+        
+        return $retorno;
+    }
 
     public function index(){
     
@@ -84,5 +109,10 @@ class Tracker extends Controller
         fclose($handle);
     
         return json_encode(["sucess" => true]);
+    }
+
+    public function geraTag(){
+        $tag = Tracker::geraTag();
+        return $tag;
     }
 }
