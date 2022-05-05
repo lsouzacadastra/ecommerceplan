@@ -19,5 +19,13 @@ $router->get('/', function () use ($router) {
 
 $router->get('/painel', 'PainelController@index');
 $router->get('/painel/painel', 'PainelController@painel');
+$router->get('/painel/painel', 'PainelController@painel');
 $router->get('/painel/migracao', 'PainelController@migracao');
 $router->get('/painel/multiplicador', 'PainelController@multiplicador');
+$router->get('/painel/multiplo', 'PainelController@graficoMultiplo');
+
+$router->post('/tracker/collect', 'TrackerController@collect');
+$router->get('/tracker/getatag', 'TrackerController@geraTag');
+
+$router->get('/tracker/collect', 'TrackerController@collect');
+$router->get('/tracker', 'TrackerController@index');

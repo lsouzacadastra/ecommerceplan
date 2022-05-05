@@ -75,7 +75,7 @@
             });
 
 
-            Highcharts.chart('grafico_media', {
+            Highcharts.chart('grafico_midia_origem', {
                 chart: {
                     type: 'column'
                 },
@@ -111,11 +111,11 @@
                         borderWidth: 0
                     }
                 },
-                "series":<?php echo $grafico_media; ?>,
+                "series":<?php echo $grafico_midia_origem; ?>,
                 
             });
 
-            Highcharts.chart('grafico_media', {
+            Highcharts.chart('grafico_trafego', {
                 chart: {
                     type: 'column'
                 },
@@ -151,7 +151,7 @@
                         borderWidth: 0
                     }
                 },
-                "series":<?php echo $grafico_media; ?>,
+                "series":<?php echo $grafico_trafego; ?>,
                 
             });
 
@@ -270,22 +270,21 @@
             </figure>
         </div>
 
-
         <div class="row first">
 
-            <h2>Origem / Mídia</h2>
+            <h2>Tráfego</h2>
 
             <table class="table">
 
                 <thead>
                     <tr>
-                        <th scope="col">Mídia</th>
+                        <th scope="col">Canal de Tráfego</th>
                         <th scope="col">Quantidade</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    <?php foreach($midias as $k => $v){ ?>
+                    <?php foreach($trafego as $k => $v){ ?>
 
                     <tr>
                         <td><?php echo $k ?></td>
@@ -298,7 +297,7 @@
             </table>
 
             <figure class="highcharts-figure">
-                <div id="grafico_media"></div>
+                <div id="grafico_trafego"></div>
             </figure>
 
 
@@ -306,7 +305,41 @@
 
         <div class="row first">
 
-            <h2>Tráfego de referência</h2>
+            <h2>Origem / Mídia</h2>
+
+            <table class="table">
+
+                <thead>
+                    <tr>
+                        <th scope="col">Origem / Mídia</th>
+                        <th scope="col">Quantidade</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <?php foreach($midias_origem as $k => $v){ ?>
+
+                    <tr>
+                        <td><?php echo $k ?></td>
+                        <td><?php echo $v ?></td>
+                    </tr>
+
+                    <?php } ?>
+
+                </tbody>
+            </table>
+
+            <figure class="highcharts-figure">
+                <div id="grafico_midia_origem"></div>
+            </figure>
+
+
+        </div>
+
+ 
+        <div class="row first">
+
+            <h2>Referências</h2>
 
             <table class="table">
 
@@ -360,7 +393,7 @@
             </table>
         </div>
 
-        
+        <!--
         <div class="row first">
 
             <h2>Últimas Visistas</h2>
@@ -387,12 +420,7 @@
                 </tbody>
             </table>
         </div>
-
-        
-
-       
-
-        
+        -->
     </div>
 </div>
 

@@ -6,14 +6,15 @@ use Illuminate\Http\Request;
 use App\Models\Visita;
 use App\Models\VisitaMongo;
 use Illuminate\Support\Facades\DB;
-use App\Solutions\Tracker\Tracker;
-
+use App\Solutions\Painel\Painel;
+use App\Solutions\Util\Util;
 
 class PainelController extends Controller
 {
     public function multiplicador()
     {
-
+        die('Erro, ativar multiplicador');
+        
         $dados = DB::table('visitas')->select('*')
             ->distinct('chave_sessao')
             ->get()
@@ -109,34 +110,55 @@ class PainelController extends Controller
 
     public function painel()
     {   
-        $data_de = date('Y-m-d', strtotime('today -10 days'));
+        $data_de = date('Y-m-d', strtotime('today -30 days'));
         $data_ate = date('Y-m-d', strtotime('today'));
         
-        $data_de = '2022-04-12';
-        $data_ate = '2022-04-12';
+        $painel = new Painel();
+        $painel->getDadosPainel($data_de, $data_ate);
 
-        $tracker = new Tracker();
-        $tracker->getDadosPainel($data_de, $data_ate);
+        view()->share('pageViews', $painel->pageViews);
+        view()->share('visitas', $painel->visitas);
+        view()->share('urls', $painel->urls);
+        view()->share('origem', $painel->origem);
+        view()->share('referrer', $painel->referrer);
+        view()->share('os', $painel->os);
+        view()->share('visitantes_unicos', $painel->visitantes_unicos);
+        view()->share('dispositivos', $painel->dispositivos);
+        view()->share('lista_ultimos_acessos', $painel->lista_ultimos_acessos);
+        view()->share('grafico_dados', $painel->grafico_dados);
+        view()->share('grafico_legenda', $painel->grafico_legenda);
+        view()->share('grafico_referrer', $painel->grafico_referrer);
 
-        view()->share('pageViews', $tracker->pageViews);
-        view()->share('visitas', $tracker->visitas);
-        view()->share('urls', $tracker->urls);
-        view()->share('origem', $tracker->origem);
-        view()->share('referrer', $tracker->referrer);
-        view()->share('os', $tracker->os);
-        view()->share('visitantes_unicos', $tracker->visitantes_unicos);
-        view()->share('dispositivos', $tracker->dispositivos);
-        view()->share('lista_ultimos_acessos', $tracker->lista_ultimos_acessos);
-        view()->share('midias', $tracker->midias);
-        view()->share('grafico_dados', $tracker->grafico_dados);
-        view()->share('grafico_legenda', $tracker->grafico_legenda);
-        view()->share('grafico_media', $tracker->grafico_media);
-        view()->share('grafico_referrer', $tracker->grafico_referrer);
+        view()->share('grafico_midia_origem', $painel->grafico_midia_origem);
+        view()->share('midias_origem', $painel->midias_origem);
+
+        view()->share('grafico_trafego', $painel->grafico_trafego);
+        view()->share('trafego', $painel->trafego);
+
         return view('painel', []);
     }
 
+    public function graficoMultiplo(){
+        $painel = new Painel();
+        $grafico = $painel->graficoMultiplo();
+        $grafico = json_encode($grafico, JSON_NUMERIC_CHECK);
+
+        $grafico = str_replace("'", '@@', $grafico);
+        $grafico = str_replace('"', "'", $grafico);
+        $grafico = str_replace("@@", '"', $grafico);
+        
+        view()->share('grafico', $grafico);
+
+        return view('multiplo', []);
+    }   
+
     public function index()
-    {
+    {   
+        $util = new Util();
+        $foo = $util->trataOrigemMidiaPath('/contador/index.html', '?utm_source=google&utm_medium=cpc&utm_campaign=sle&utm_content=buy-now&utm_term=term', 'http://localhost/contador/link.html');
+        
+        dd($foo);
+        die('foo');
         return redirect('painel/painel');
     }
 }

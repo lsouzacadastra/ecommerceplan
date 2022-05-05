@@ -1,3 +1,5 @@
+let tag = document.currentScript.getAttribute('tg');
+
 //Cookies
 function getCookieSlsv(offset) {
     var endstr = document.cookie.indexOf(";", offset);
@@ -13,24 +15,87 @@ function GetCookie(name) {
     var i = 0;
     while (i < clen) {
         var j = i + alen;
-        if (document.cookie.substring(i, j) == arg)
+        if (document.cookie.substring(i, j) == arg){
             return getCookieSlsv(j);
+        }
+            
         i = document.cookie.indexOf(" ", i) + 1;
         if (i == 0)
             break;
     }
+
     return null;
+}
+
+function verificaCookieSessao(){
+    
+    let referrer = document.referrer;
+    let cookie = GetCookie('contador_solutions');
+    
+    if(cookie !== null){
+        cookie = JSON.parse(cookie);
+
+        console.log([cookie.referrer, referrer]);
+        
+        if(cookie.referrer != referrer){
+            console.log('trocou Referrer');
+            cookie = null;
+        }else{
+            return cookie;
+        }
+    }
+    
+    return cookie;
+}
+
+function dataExpiracao(){
+
+    //Tempo de validade da sessão
+    let tempo_expiracao = 0.5; //Meia hora 
+
+    data = new Date;
+    data.setHours(23, 40, 59);
+
+    //Verifica se expiração vai passar da meia noite
+    dia_hoje  = data.getDay();
+    
+    let verificar = data.getTime();
+    verificar += (1000 * 60 * 30);
+
+    data_verificar = new Date(verificar);
+    dia_verificar = data_verificar.getDay();
+
+    //Caso passe, o vencimento fica à meia noite
+    if(dia_verificar != dia_hoje){
+        data.setHours(23, 59, 59);
+
+    //Caso contrário, vence na hora de agora + 30 minutos
+    }else{
+        data.setTime(data.getTime() + (tempo_expiracao * 60 * 60 * 1000));
+    }
+
+    return data;
 }
 
 function SetCookie(cname, cvalue) {
 
-    let tempo_expiracao = 0.5; //Meia hora 
+    //Data de expiração
+    let data_expiracao = dataExpiracao();
+    var expires = "expires=" + data_expiracao.toUTCString();
 
-    var d = new Date();
-    d.setTime(d.getTime() + (tempo_expiracao * 60 * 60 * 1000));
-    var expires = "expires=" + d.toUTCString();
+    //Criação do cookie
+    let referrer = document.referrer;
+    
+    let valor = {
+        k: cvalue,
+        referrer: referrer
+    }
 
-    document.cookie = cname + "=" + cvalue + "; " + expires;
+    valor = JSON.stringify(valor);
+
+    document.cookie = cname + "=" + valor + "; " + expires;
+
+    console.log('Cookie criado');
 }
 
 function DeleteCookie(name) {
@@ -83,11 +148,59 @@ function makeRequest(method, url) {
     });
 }
 
+function verificaUrl(){
+
+    return true;//REMOVER ************
+
+    let cookie = GetCookie('pgs');
+    let url = document.location.pathname;
+
+    if(cookie === null){
+        let visita = { 'pgs': []};
+        visita.pgs.push(url);
+
+        visita = JSON.stringify(visita);
+        
+        //Cria cookie
+        document.cookie = 'pgs' + "=" + visita + "; ";
+
+        return true;
+    }else{
+        
+        cookie = JSON.parse(cookie);
+
+        if(cookie.pgs.indexOf(url) === -1){
+            
+            console.log(cookie.pgs.indexOf(url), cookie.pgs);
+            cookie.pgs.push(url);
+            cookie = JSON.stringify(cookie);
+            document.cookie = 'pgs' + "=" + cookie + "; ";
+            
+            return true;
+        }
+
+        console.log('pagina já visitada');
+        return false;
+    }
+}
+
+function zeraUrl(){
+    let visita = { 'pgs': []};
+    visita = JSON.stringify(visita);
+        
+    //Cria cookie
+    document.cookie = 'pgs' + "=" + visita + "; ";
+}
+
 //Função principal para registrar as visistas
-async function registraVisita() {
+async function registraVisita(k, tag) {
+    
+    if(!tag){
+        return false;
+    }
 
     let xhr = new XMLHttpRequest();
-    let url = "http://localhost/projeto_lumen/lumen/public/tracker"; //Url do endpoind que registra as visitas (LOCAL)
+    let url = "http://localhost:8000/public/tracker/collect"; //Url do endpoind que registra as visitas (LOCAL)
     //let url = "https://leonardosouza.com.br/contadorSolutions.php"; //Url do endpoind que registra as visitas
 
     xhr.open("POST", url, true);
@@ -157,12 +270,30 @@ async function registraVisita() {
     }
 
     //let data = JSON.stringify({ "ip": ip, "localizacao": localizacao, dispositivo: dispositivo });
-    let data = JSON.stringify({ "ip": ip, "url": url_atual, dispositivo: dispositivo, k: k, referrer: referrer, resolucao:resolucao, os:os });
 
+    visita = { 
+               tag: tag,
+               ip: ip, 
+               url: url_atual, 
+               dispositivo: dispositivo, 
+               k: k, 
+               referrer: referrer, 
+               host: window.location.host,
+               path: window.location.pathname,
+               search: window.location.search,
+               resolucao:resolucao, 
+               os:os 
+            }
+
+    let data = JSON.stringify(visita);
+
+    //console.log(visita);
     xhr.send(data);
 }
 
-let cookie = GetCookie('contador_solutions');
+//Valida Cookie de sessão
+let cookie = verificaCookieSessao();
+
 let k = '';
 
 //Se o cookie não existir, ele vai ser iniciado
@@ -174,10 +305,15 @@ if (cookie === null) {
     k = p1 + p2;
 
     SetCookie('contador_solutions', k);
+    zeraUrl();
 
     //Se o cookie existir, ele vai ser registrado novamente e o tempo de sessão do usuário será reiniciado
 } else {
-    k = cookie;
+    k = cookie.k;
 }
 
-registraVisita(k);
+//verifica se url já foi registrada, valida cookie de visita 
+let registrar_visita = verificaUrl();
+if(registrar_visita){
+    registraVisita(k, tag);
+}

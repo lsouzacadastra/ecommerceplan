@@ -13,12 +13,6 @@ class TrackerController extends Controller
 
     public function collect(){
         
-        //Libera o CORS
-        header('Access-Control-Allow-Origin: *');
-        header('Access-Control-Allow-Headers: *');
-        header('Access-Control-Allow-Methods: *');
-        header('Access-Control-Max-Age: 3600');
-        
         //Default time
         date_default_timezone_set('America/Sao_Paulo');
        
