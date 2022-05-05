@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\DB;
 use App\Solutions\Painel\Painel;
 use App\Solutions\Util\Util;
 
+use App\Services\PainelService;
+
 class PainelController extends Controller
 {
     public function multiplicador()
@@ -110,10 +112,10 @@ class PainelController extends Controller
 
     public function painel()
     {   
-        $data_de = date('Y-m-d', strtotime('today -30 days'));
+        $data_de = date('Y-m-d', strtotime('today -40 days'));
         $data_ate = date('Y-m-d', strtotime('today'));
         
-        $painel = new Painel();
+        $painel = new PainelService();
         $painel->getDadosPainel($data_de, $data_ate);
 
         view()->share('pageViews', $painel->pageViews);

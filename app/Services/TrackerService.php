@@ -2,24 +2,22 @@
 
 namespace App\Services;
 
-use App\Models\Visita;
-use App\Models\VisitaMongo;
-use App\Models\VisitaTeste;
 use App\Solutions\Util\Util;
-use Illuminate\Support\Facades\DB;
+use App\Repositories\TrackerRepository;
 
 class TrackerService
 {
     public function registraVisista($dados){
 
         $util = new Util();
+        $repository = new TrackerRepository();
 
         //Verifica se visita existe
-        $visita_exist = VisitaTeste::where('chave_sessao', $dados['k'])->get();
+        $visita_exist = $repository->verificaVisitaExiste($chave_sessao = $dados['k']);
 
         //Cria visita
         if(empty(@$visita_exist[0]['chave_sessao'])){
-
+            
             $ip = $dados['ip'];
 
             //Comunicação com a API que pega localização
@@ -55,7 +53,8 @@ class TrackerService
                 ]
             ];
 
-            VisitaTeste::create($visita);
+            $repository->criaVisita($visita);
+            
 
         //Atualiza URLs
         }else{
@@ -74,10 +73,10 @@ class TrackerService
                 $paginas_atualizar = $visita_exist[0]['paginas'];
                 $paginas_atualizar[] = ['hora' => date('Y-m-d H:i:s'), 'url' => $dados['path'] ];
 
-                VisitaTeste::where( array ('chave_sessao' => $dados['k']) )->update([ 'paginas' => $paginas_atualizar], ['upsert' => true] );
+                $repository->atualizaVisita($dados, $paginas_atualizar);
             }
         }
 
-        return json_encode([@$paginas_atualizar, $visita]);
+        return json_encode([@$paginas_atualizar, @$visita]);
     }
 }
